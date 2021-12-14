@@ -8,9 +8,11 @@
 </head>
 <body>
     <canvas id="canvas" width="960" height="720"></canvas>
+    <div class="coords"></div>
     <script>
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext('2d');
+        let coords = document.getElementById("coords");
 
         let points = [];
         let isDown = false;
