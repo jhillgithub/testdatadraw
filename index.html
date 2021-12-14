@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="960" height="720"></canvas>
+    <script>
+        let canvas = document.getElementById("canvas");
+        let context = canvas.getContext('2d');
 
+        let points = [];
+        let isDown = false;
+        let prevX, PrevY;
+
+        canvas.onmousedown = (e) => {
+            let pos = getXY(e);
+
+            prevX = pos.x;
+            prevY = pos.y;
+
+            points.push([]);
+
+            points[points.length - 1].push([pos.x, pos.y]);
+
+            isDown = true;
+        }
+
+        canvas.onmousemove = (e) => {
+            if (!isDown ) return;
+
+            let pos = getXY(e);
+
+            context.beginPath();
+            context.moveTo(prevX, prevY);
+            context.lineTo(pos.x, pos.y);
+            context.stroke();
+
+            prevX = pos.x;
+            prevY = pos.y;
+
+            points[points.length - 1].push([pos.x, pos.y]);
+        }
+
+        canvas.onmouseup = () => {
+            isDown = false;
+            coords.innerHTML = JSON.stringify(points);
+            renderPoints(points);
+        }
+
+        function getXY(e) {
+            let r = canvas.getBoundingClientRect();
+            return {x: e.clientX - r.left, y: e.clientY - r.top}
+        }
+
+        function renderPoints(points) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.strokeStyle = '#f00';
+
+            for(var i = 0, t, p, pts; pts = points[i]; i++) {
+                context.beingPath();
+                context.moveTo(pts[0][0], pts[0][2]);
+                for(t = 1, p = pts[t]; t++) {
+                    context.lineTo(p[0], p[1]);
+                }
+                context.stroke();
+            }
+            context.strokeStyle = '#000';
+        }
+
+    </script>
+</body>
+</html>
